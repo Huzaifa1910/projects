@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://www.gstatic.com/firebasejs/8.9.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.9.1/firebase-storage.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.9.1/firebase-database.js"></script>
+    <script>
+      // Your web app's Firebase configuration
+      const firebaseConfig = {
+            apiKey: "AIzaSyBh4Qd-rGbhuLCu0492-qBuJc1fuvJaMUY",
+            authDomain: "dadabhainoorejee.firebaseapp.com",
+            databaseURL: "https://dadabhainoorejee-default-rtdb.firebaseio.com",
+            projectId: "dadabhainoorejee",
+            storageBucket: "dadabhainoorejee.appspot.com",
+            messagingSenderId: "689065449320",
+            appId: "1:689065449320:web:be22b7603afe36bb1168dd"
+          };
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+    </script>
+</head>
+<body>
+<!-- -------------------------Invoices Modal------------------------- -->
+
+<!-- Modal -->
+<div class="modal fade" id="invoicesModal" tabindex="-1" aria-labelledby="InvoicesModal" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editModalLabel">Details</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-body">
+          <h4 id="editNameInput">Hello WOrld</h4>
+      </div>
+      </div>
+      <!-- <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Update</button>
+      </div> -->
+    </div>
+  </div>
+</div>
+<!-- Closing COnfirmation modal for Editing data -->
+
+
+
+
+
+<!-- -------------------------/Invoices Modal------------------------- -->
+
+
+
+
+  <!--------------------------Edit Modal ---------------------------->
+  <div class="modal fade" id="editInvModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Edit Invoice</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <input  type="date" style="width: 1100px !important;" required class="form-control date" id="editexampleInput1" aria-describedby="emailHelp" >
+         <textarea  type="text" style="width: 1100px !important;" required class="form-control desc" id="editexampleInput2" rows="3" aria-describedby="emailHelp" placeholder="Description"></textarea>
+         <input  type="number" style="width: 1100px!important;" required class="form-control credit" id="editexampleInput3" aria-describedby="emailHelp" placeholder="Total">
+         <!-- <input  type="number" style="width: 1100px !important;" required class="form-control debit" id="editexampleInput4" aria-describedby="emailHelp" placeholder="Debit"> -->
+         <input  type="number" style="width: 1100px!important;" required class="form-control credit" id="editexampleInput5" aria-describedby="emailHelp" placeholder="Credit">
+         <textarea  type="text" style="width: 1100px !important;" required class="form-control desc" id="editexampleInput6" rows="3" aria-describedby="emailHelp" placeholder="Remarks"></textarea>
+       </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" onclick="editInv()">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- CLosing Edit Invoice Modal -->
+  <h1 class="text-center" id="headInvoice"></h1>
+  
+    <!-- ----------------------MODAL 1------------------------------------------------ -->
+    <h1 class="headModal"></h1>
+            <div class="container">
+                <table class="table table-striped table-hover">
+                    <thead class="thead-dark">
+                      <tr>
+                        <th class="sNo" scope="col">#</th>
+                        <th class="date" scope="col">Date</th>
+                        <th class="desc" scope="col">Description</th>
+                        <th class="credit" scope="col">Total</th>
+                        <!-- <th class="debit" scope="col">Debit</th> -->
+                        <th class="credit" scope="col">Credit</th>
+                        <th class="remains" scope="col">Remaining</th>
+                        <th class="profit" scope="col">Profit</th>
+                        <th class="loss" scope="col">Loss</th>
+                        <th class="remarks" scope="col">Remarks</th>
+                        <th class="editDel" scope="col">Edit/Delete</th>
+                      </tr>
+                    </thead>
+                    <tbody id="detailsBody">
+                      <!-- <tr>
+                        <td class="sNo" scope="row">1</td>
+                        <td class="date">Mark</td>
+                        <td class="desc">Mark</td>
+                        <td class="debit">2313</td>
+                        <td class="credit">23123</td>
+                      </tr>
+                      <tr>
+                        <td class="sNo" scope="row">1</td>
+                        <td class="date">Mark</td>
+                        <td class="desc">Mark</td>
+                        <td class="debit">2313</td>
+                        <td class="credit">23123</td>
+                      </tr>
+                      <tr>
+                        <td class="sNo" scope="row">1</td>
+                        <td class="date">Mark</td>
+                        <td class="desc">Mark</td>
+                        <td class="debit">2313</td>
+                        <td class="credit">23123</td>
+                      </tr> -->
+                    </tbody>
+                </table>
+            
+              <table class="table table-striped">
+                <tbody>
+                  <tr>
+                    <!-- <th>-</th>
+                    <th>-</th> -->
+                    <th>Grand Total</th>
+                    <th>Grand Total Credit</th>
+                    <!-- <th>Grand Total Debit</th> -->
+                    <th>Grand Total Remaining</th>
+                    <th>Grand Total Profit</th>
+                    <th>Grand Total Loss</th>
+                  </tr>
+                  <tr>
+                    <!-- <td>-</td>
+                    <td>-</td> -->
+                    <td id="grandTotal"></td>
+                    <!-- <td id="totalDebit"></td> -->
+                    <td id="totalCredit"></td>
+                    <td id="totalGAP"></td>
+                    <td id="totalProfit"></td>
+                    <td id="totalLoss"></td>
+                  </tr>
+                </tbody>
+              </table>
+                <!-- <div id="adding">
+                <table class="opa">
+                <tbody class="add-btns">
+                <tr>
+                  <form id="detailsForm"  class="trFlex">
+                    <tr><td ><input  type="date" name="date" style="width: 250px !important;" required class="form-control date" id="date" aria-describedby="emailHelp" ></td>
+                      <td ><input  type="number" name="total" style="width: 250px !important;" required class="form-control debit" id="total" aria-describedby="emailHelp" placeholder="Total"></td>
+                #      <td ><input  type="number" name="debit" style="width: 250px !important;" required class="form-control credit" id="debit" aria-describedby="emailHelp" placeholder="Debit"></td>
+                      <td ><input  type="number" name="credit" style="width: 250px !important;" required class="form-control credit" id="credit" aria-describedby="emailHelp" placeholder="Credit"></td></tr>
+                      <tr>
+                      <td  colspan="2"><textarea  type="text" name="description" style="width: 500px !important;" required class="form-control desc" id="description" rows="1" aria-describedby="emailHelp" placeholder="Description"></textarea></td>
+                    <td scope = "row"   colspan="2"><textarea type="text" name="remarks" style="width: 500px !important;" required class="form-control desc" id="remarks" rows="1" aria-describedby="emailHelp" placeholder="Remarks"></textarea></td>
+                    <td scope="row"><button type="button" onclick="addDetails()" class="btn btn-lg btn-outline-primary active btnwidth">Add</button></td>
+                  </tr>
+                  </form>
+                </tr>
+            </tbody>
+        </table>
+        </div> -->
+        
+        <div class="modal fade" id="addInvoiceModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add Invoice</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <div id="adding">
+                  <table>
+                  <tbody>
+                  <tr>
+                    <form id="detailsForm">
+                      <tr><td ><input  type="date" name="date"  required class="form-control" id="date" aria-describedby="emailHelp" ></td>
+                        <td ><input  type="number" name="total" style="width: 250px !important;" required class="form-control " id="total" aria-describedby="emailHelp" placeholder="Total"></td>
+                        <!-- <td ><input  type="number" name="debit" style="width: 250px !important;" required class="form-control credit" id="debit" aria-describedby="emailHelp" placeholder="Debit"></td> -->
+                        <td ><input  type="number" name="credit" style="width: 250px !important;" required class="form-control" id="credit" aria-describedby="emailHelp" placeholder="Credit"></td></tr>
+                        <tr>
+                        <td  colspan="2"><textarea  type="text" name="description" style="width: 500px !important;" required class="form-control" id="description" rows="2" aria-describedby="emailHelp" placeholder="Description"></textarea></td>
+                        <td><div id="content-section">
+                          <input type="radio" name="content-type" value="text" checked> Text
+                          <input type="radio" name="content-type" value="image"> Image
+                          <br>
+                          <div id="content-input">
+                            <textarea type="text" id="remarks" style="width: 500px !important;" name="text-input" placeholder="Remarks" class="form-control"></textarea>
+                            <input type="file" id="image-input" name="image-input" accept="image/*">
+                          </div>
+                        </div>
+                        </td>
+                      <!-- <td scope = "row"   colspan="2"><textarea type="text" name="remarks" style="width: 500px !important;" required class="form-control" id="remarks" rows="1" aria-describedby="emailHelp" placeholder="Remarks"></textarea></td> -->
+                      <!-- <td scope="row"><button type="button" onclick="addDetails()" class="btn btn-lg btn-outline-primary active btnwidth">Add</button></td> -->
+                    </tr>
+                    </form>
+                  </tr>
+              </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="addDetails()">Create Invoice</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addInvoiceModal">
+          Create Invoice
+        </button>
+      </div>
+        
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+        <script src="authBusiness.js"></script>
+        <script src="invoice.js"></script>
+        <!-- <script src="createUser.js"></script> -->
+</body>
+</html>
